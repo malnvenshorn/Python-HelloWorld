@@ -1,0 +1,10 @@
+# Python environment
+.env
+
+# Byte-compiled files
+__pycache__/
+*.pyc
+
+# Distribution / packaging
+*.egg-info/
+dist/
