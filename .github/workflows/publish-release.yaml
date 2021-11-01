@@ -26,6 +26,9 @@ jobs:
           build
           --sdist
           --outdir dist/
+      - name: Get package name
+        id: package
+        run: echo "::set-output name=fullname::$(python setup.py --fullname)"
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
@@ -42,6 +45,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./dist/*.tar.gz
+          asset_path: ./dist/${{ steps.package.outputs.fullname }}.tar.gz
           asset_name: plugin.tar.gz
           asset_content_type: application/gzip
