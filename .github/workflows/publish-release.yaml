@@ -9,3 +9,5 @@ jobs:
   release-on-github:
     name: Release package on Github
     uses: malnvenshorn/Python-HelloWorld/.github/workflows/publish-python-packages-on-github.yaml@master
+    with:
+      asset_name: package.tar.gz
