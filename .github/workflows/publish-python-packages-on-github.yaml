@@ -27,7 +27,7 @@ jobs:
           pip install --upgrade build
 
       - name: Build package
-        run: |t
+        run: |
           python -m build --sdist --outdir dist/
 
       - name: Find package
