@@ -8,4 +8,4 @@ on:
 jobs:
   release-on-github:
     name: Release package on Github
-    uses: .github/workflows/publish-python-packages-on-github.yaml@master
+    uses: malnvenshorn/Python-HelloWorld/.github/workflows/publish-python-packages-on-github.yaml@master
