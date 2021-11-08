@@ -1,10 +1,6 @@
 name: Publish Release
 
-on:
-  push:
-    tags:
-      - '*'
-  create:
+on: create
 
 jobs:
   release-on-github:
