@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='hello_world',
-    version='0.4.0',
+    version='0.4.2',
     description='say hello in python',
     url='https://github.com/malnvenshorn/python-hello-world',
     author='malnvenshorn',
