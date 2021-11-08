@@ -28,22 +28,22 @@ jobs:
           python -m pip install --upgrade pip
           pip install --upgrade build
 
-      - name: Pckage version
-        id: package_version
-        run: echo "::set-output name=version::$(python -c "from build.util import project_wheel_metadata; metadata=project_wheel_metadata('.'); print(metadata['version']);")"
+      - name: New tag
+        id: new_tag
+        run: echo "::set-output name=tag::$(python -c "from build.util import project_wheel_metadata; metadata=project_wheel_metadata('.'); print('/${{ inputs.tag_prefix }}'+metadata['version']);")"
 
       - name: Latest tag
         id: latest_tag
         run: echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
 
       - name: Create tag
-        if: ${{ steps.package_version.outputs.version != steps.latest_tag.outputs.tag }}
+        if: ${{ steps.new_tag.outputs.tag != steps.latest_tag.outputs.tag }}
         uses: actions/github-script@v5
         with:
           script: |
             github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              ref: "refs/tags/${{ inputs.tag_prefix }}${{ steps.package_version.outputs.version }}",
+              ref: "refs/tags/${{ steps.new_tag.outputs.tag }}",
               sha: context.sha
             })
