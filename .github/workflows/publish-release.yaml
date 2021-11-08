@@ -1,6 +1,7 @@
 name: Publish Release
 
-on: create
+on:
+  create:
 
 jobs:
   release-on-github:
