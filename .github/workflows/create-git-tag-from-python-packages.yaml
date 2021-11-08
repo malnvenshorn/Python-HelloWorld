@@ -30,7 +30,7 @@ jobs:
 
       - name: Pckage version
         id: package_version
-        run: echo "::set-output name=version::$(python -c \"from build.util import project_wheel_metadata; metadata=project_wheel_metadata('.'); print(metadata['version']);\")"
+        run: echo "::set-output name=version::$(python -c "from build.util import project_wheel_metadata; metadata=project_wheel_metadata('.'); print(metadata['version']);")"
 
       - name: Latest tag
         id: latest_tag
