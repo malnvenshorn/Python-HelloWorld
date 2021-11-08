@@ -1,0 +1,11 @@
+name: Create version tag
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  create-tag:
+    name: Create tag
+    uses: malnvenshorn/Python-HelloWorld/.github/workflows/create_git_tag_from_python_packages.yaml@master
