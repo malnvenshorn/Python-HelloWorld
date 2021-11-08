@@ -8,8 +8,8 @@ on:
         type: string
 
 jobs:
-  create-tag:
-    name: Create Git tag from Python package
+  tag-from-version:
+    name: Create Git tag from Python package version
     runs-on: ubuntu-latest
 
     steps:
