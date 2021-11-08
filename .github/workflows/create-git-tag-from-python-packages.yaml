@@ -30,7 +30,7 @@ jobs:
 
       - name: New tag
         id: new_tag
-        run: echo "::set-output name=tag::$(python -c "from build.util import project_wheel_metadata; metadata=project_wheel_metadata('.'); print('/${{ inputs.tag_prefix }}'+metadata['version']);")"
+        run: echo "::set-output name=tag::$(python -c "from build.util import project_wheel_metadata; metadata=project_wheel_metadata('.'); print('${{ inputs.tag_prefix }}'+metadata['version']);")"
 
       - name: Latest tag
         id: latest_tag
