@@ -40,9 +40,8 @@ jobs:
         if: ${{ steps.package_version.outputs.version != steps.latest_tag.outputs.tag }}
         uses: actions/github-script@v5
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN  }}
           script: |
-            github.git.createRef({
+            github.rest.git.createRef({
               owner: context.repo.owner,
               repo: context.repo.repo,
               ref: "refs/tags/${{ inputs.tag_prefix }}${{ steps.package_version.outputs.version }}",
