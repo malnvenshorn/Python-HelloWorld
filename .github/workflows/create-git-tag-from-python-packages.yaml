@@ -37,7 +37,7 @@ jobs:
         run: echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
 
       - name: Create tag
-        if: "${{ inputs.tag_prefix }}${{ steps.package_version.outputs.version }}" != "${{ steps.latest_tag.outputs.tag }}"
+        if: ${{ steps.package_version.outputs.version != steps.latest_tag.outputs.tag }}
         uses: actions/github-script@v5
         with:
           github-token: ${{ secrets.GITHUB_TOKEN  }}
