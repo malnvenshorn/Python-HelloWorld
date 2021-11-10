@@ -1,60 +1,62 @@
 name: Publish Python packages on Github
+description: Build and publish Python package on Github
 
-on:
-  workflow_call:
-    inputs:
-      asset_name:
-        description: Name of the uploaded release asset
-        type: string
+inputs:
+  asset_name:
+    description: Name of the uploaded release asset
+    type: string
+  checkout:
+    description: Checkout repository
+    required: true
+    type: boolean
+    default: true
 
-jobs:
-  build-and-release:
-    name: Build and publish Python package on Github
-    runs-on: ubuntu-latest
+runs:
+  using: composite
+  steps:
+    - name: Checkout
+      if: ${{ inputs.checkout }}
+      uses: actions/checkout@v2
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.9
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install --upgrade build
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install --upgrade build
+    - name: Build package
+      run: |
+        python -m build --sdist --outdir dist/
 
-      - name: Build package
-        run: |
-          python -m build --sdist --outdir dist/
+    - name: Find package
+      id: find_package
+      run: echo "::set-output name=path::$(find dist/ -name *.tar.gz)"
 
-      - name: Find package
-        id: find_package
-        run: echo "::set-output name=path::$(find dist/ -name *.tar.gz)"
+    - name: Asset name
+      id: asset_name
+      run: echo "::set-output name=name::$([[ -n '${{ inputs.asset_name }}' ]] && echo '${{ inputs.asset_name }}' || basename '${{ steps.find_package.outputs.path }}')"
 
-      - name: Asset name
-        id: asset_name
-        run: echo "::set-output name=name::$([[ -n '${{ inputs.asset_name }}' ]] && echo '${{ inputs.asset_name }}' || basename '${{ steps.find_package.outputs.path }}')"
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        draft: true
+        prerelease: false
+        release_name: ${{ github.ref }}
+        tag_name: ${{ github.ref }}
 
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          draft: true
-          prerelease: false
-          release_name: ${{ github.ref }}
-          tag_name: ${{ github.ref }}
-
-      - name: Upload release asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.find_package.outputs.path }}
-          asset_name: ${{ steps.asset_name.outputs.name }}
-          asset_content_type: application/gzip
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ steps.find_package.outputs.path }}
+        asset_name: ${{ steps.asset_name.outputs.name }}
+        asset_content_type: application/gzip

@@ -7,6 +7,9 @@ on:
 
 jobs:
   release-on-github:
+    name: Release package on Github
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -16,9 +19,10 @@ jobs:
         run: echo ::set-output name=version::${GITHUB_REF#refs/tags/}
 
       - name: Set package version
-        run: sed "s/\(version=\).*/\1'${{ steps.get_version.outputs.version }}',/" setup.py
+        run: sed "s/version='.*'/version='${{ steps.get_version.outputs.version }}'/" setup.py
 
       - name: Release package on Github
         uses: malnvenshorn/Python-HelloWorld/.github/workflows/publish-python-packages-on-github.yaml@master
         with:
+          checkout: false
           asset_name: package.tar.gz
