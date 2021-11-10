@@ -8,22 +8,10 @@ on:
 jobs:
   release-on-github:
     name: Release package on Github
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Get version from tag
-        id: get_version
-        run: echo ::set-output name=version::${GITHUB_REF#refs/tags/}
-
-      - name: Set package version
-        run: sed -i "s/version='.*'/version='${{ steps.get_version.outputs.version }}'/" setup.py
-
-      - name: Release package on Github
-        uses: malnvenshorn/Python-HelloWorld/publish-python-packages-on-github@master
-        with:
-          checkout: false
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          asset_name: package.tar.gz
+    uses: malnvenshorn/Python-HelloWorld/.github/workflows/publish-python-packages-on-github.yaml@master
+    with:
+      asset_name: package.tar.gz
+      version_from_tag: true
+      version_file: setup.py
+      version_search: version='.*'
+      version_replace: version='{version}'
