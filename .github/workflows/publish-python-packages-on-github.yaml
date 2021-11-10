@@ -12,13 +12,13 @@ on:
         type: boolean
         default: false
       version_file:
-        desscription: File for the replacement
+        description: File for the replacement
         type: string
       version_search:
-        desscription: Version string that will be replaced
+        description: Version string that will be replaced
         type: string
       version_replace:
-        desscription: New version string with placeholder
+        description: New version string with placeholder
         type: string
 
 jobs:
