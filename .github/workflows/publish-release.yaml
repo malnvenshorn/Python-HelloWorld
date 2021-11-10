@@ -19,10 +19,11 @@ jobs:
         run: echo ::set-output name=version::${GITHUB_REF#refs/tags/}
 
       - name: Set package version
-        run: sed "s/version='.*'/version='${{ steps.get_version.outputs.version }}'/" setup.py
+        run: sed -i "s/version='.*'/version='${{ steps.get_version.outputs.version }}'/" setup.py
 
       - name: Release package on Github
         uses: malnvenshorn/Python-HelloWorld/publish-python-packages-on-github@master
         with:
           checkout: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           asset_name: package.tar.gz
