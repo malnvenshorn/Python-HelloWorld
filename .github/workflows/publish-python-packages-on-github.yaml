@@ -43,7 +43,8 @@ jobs:
       - name: Set version
         if: ${{ inputs.version_from_tag }}
         run: |
-          sed -i "s/${search}/${replace/\{version\}/${GITHUB_TAG_NAME}}/" ${file}
+          version=${GITHUB_REF#refs/tags/}
+          sed -i "s/${search}/${replace/\{version\}/${version}}/" ${file}
         env:
           file: ${{ inputs.version_file }}
           search: ${{ inputs.version_search }}
