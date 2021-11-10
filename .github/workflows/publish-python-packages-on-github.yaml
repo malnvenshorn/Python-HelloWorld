@@ -41,7 +41,7 @@ jobs:
           pip install --upgrade build
 
       - name: Set version
-        if: ${{ version_from_tag }}
+        if: ${{ inputs.version_from_tag }}
         run: |
           sed -i "s/${search}/${replace/\{version\}/${GITHUB_TAG_NAME}}/" ${file}
         env:
