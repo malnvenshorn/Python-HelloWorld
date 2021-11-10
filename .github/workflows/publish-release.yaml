@@ -22,7 +22,7 @@ jobs:
         run: sed "s/version='.*'/version='${{ steps.get_version.outputs.version }}'/" setup.py
 
       - name: Release package on Github
-        uses: malnvenshorn/Python-HelloWorld/.github/workflows/publish-python-packages-on-github.yaml@master
+        uses: malnvenshorn/Python-HelloWorld/publish-python-packages-on-github@master
         with:
           checkout: false
           asset_name: package.tar.gz
