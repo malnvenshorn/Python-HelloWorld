@@ -2,6 +2,10 @@ name: Publish Python packages on Github
 description: Build and publish Python package on Github
 
 inputs:
+  github_token:
+    desscription: Github token
+    required: true
+    type: string
   asset_name:
     description: Name of the uploaded release asset
     type: string
@@ -48,7 +52,7 @@ runs:
       id: create_release
       uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.github_token }}
       with:
         draft: true
         prerelease: false
@@ -58,7 +62,7 @@ runs:
     - name: Upload release asset
       uses: actions/upload-release-asset@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.github_token }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{ steps.find_package.outputs.path }}
