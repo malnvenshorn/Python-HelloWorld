@@ -27,18 +27,22 @@ runs:
       run: |
         python -m pip install --upgrade pip
         pip install --upgrade build
+      shell: bash
 
     - name: Build package
       run: |
         python -m build --sdist --outdir dist/
+      shell: bash
 
     - name: Find package
       id: find_package
       run: echo "::set-output name=path::$(find dist/ -name *.tar.gz)"
+      shell: bash
 
     - name: Asset name
       id: asset_name
       run: echo "::set-output name=name::$([[ -n '${{ inputs.asset_name }}' ]] && echo '${{ inputs.asset_name }}' || basename '${{ steps.find_package.outputs.path }}')"
+      shell: bash
 
     - name: Create release
       id: create_release
